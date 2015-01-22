@@ -1,0 +1,68 @@
+{
+    "name": "TEST API",
+    "authority": "Unistra:DI",
+    "base_url": "http://localhost:3000/api",
+    "formats": [
+        "json"
+    ],
+    "version": "1.0.0",
+
+    "methods": {
+
+        "add_product": {
+            "path": "/products",
+            "required_params": [
+            ],
+            "optional_params": [
+            ],
+            "required_payload": true,
+            "method": "POST",
+            "authentication": true,
+            "documentation": "Add a product"
+        },
+
+        "get_products": {
+            "path": "/products",
+            "required_params": [
+            ],
+            "optional_params": [
+                "name",
+                "sku",
+                "price"
+            ],
+            "method": "GET",
+            "authentication": true,
+            "documentation": "Get products"
+        },
+
+        "get_product": {
+            "path": "/products/:id",
+            "required_params": [
+                "id"
+            ],
+            "optional_params": [
+            ],
+            "method": "GET",
+            "authentication": true,
+            "documentation": "Get one product"
+        },
+
+        "delete_product": {
+            "path": "/products/:id",
+            "required_params": [
+                "id"
+            ],
+            "optional_params": [
+            ],
+            "method": "DELETE",
+            "authentication": true,
+            "documentation": "delete one product"
+        }
+
+    },
+
+    "meta": {
+        "documentation": "",
+        "authors": "dip unistra"
+    }
+}

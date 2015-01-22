@@ -1,0 +1,16 @@
+{
+    "name": "spore-lsc-unit-test",
+    "main": "server.js",
+    "scripts": {
+        "preinstall": "npm install -g karma-cli"
+    },
+    "dependencies": {
+        "karma": "latest",
+        "karma-jasmine": "latest",
+        "karma-chrome-launcher": "latest",
+        "express": "latest",
+        "mongoose": "latest",
+        "node-restful": "latest",
+        "body-parser": "latest"
+    }
+}

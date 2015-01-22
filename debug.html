@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spore-lsc example</title>
+    <script src="src/js/request.js" type="text/javascript"></script>
+    <script src="src/js/middleware.js" type="text/javascript"></script>
+    <script src="src/js/spore.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        s = new Spore("http://127.0.0.1:8001/test/data/description.json", function(){
+        if (s.isReady) {
+          s.enable(SporeMiddlewareAuthApiKey, {key_name:"Authorization", key_value:"Token 7d9808e82fb7476101f3963e40b94fbfe50a5c9e"});
+          s.logBasicInfos()
+
+          s.methods.add_product({
+            payload: {
+              name: "voiture",
+              sku: "206",
+              price: 10000
+            }
+          }, function(response){
+            console.log("Recuperation de toto ... :");
+            return console.log(response);
+          });
+        }
+      });
+    </script>
+</head>
+<body>
+</body>
+</html>
