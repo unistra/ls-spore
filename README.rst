@@ -72,7 +72,7 @@ Install nodejs and mongodb :
     sudo apt-get install nodejs npm
     sudo apt-get install mongodb
 
-Run test WS abd install and run karma :
+Run a test WS and install and run karma :
 
 .. code-block:: bash
 
