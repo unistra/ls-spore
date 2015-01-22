@@ -1,5 +1,9 @@
 lsc-spore
 =========
+
+.. image:: https://travis-ci.org/unistra/lsc-spore.svg?branch=master
+    :target: https://travis-ci.org/unistra/lsc-spore
+
 A client-side livescript/javascript spore client
 
 
