@@ -1,6 +1,9 @@
 {
     "name": "spore-lsc-unit-test",
     "main": "server.js",
+    "scripts": {
+        "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js"
+    },
     "dependencies": {
         "karma": "latest",
         "karma-jasmine": "latest",
