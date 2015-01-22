@@ -1,9 +1,6 @@
 {
     "name": "spore-lsc-unit-test",
     "main": "server.js",
-    "scripts": {
-        "preinstall": "npm install -g karma-cli"
-    },
     "dependencies": {
         "karma": "latest",
         "karma-jasmine": "latest",

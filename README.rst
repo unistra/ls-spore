@@ -75,7 +75,7 @@ Run test WS abd install and run karma :
     cd test
     sudo npm install
     node server.js
-    karma start --single-run --browsers PhantomJS karma.conf.js
+    ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js
 
 
 Implemented
