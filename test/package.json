@@ -8,6 +8,7 @@
         "karma": "latest",
         "karma-jasmine": "latest",
         "karma-chrome-launcher": "latest",
+        "karma-phantomjs-launcher": "latest",
         "express": "latest",
         "mongoose": "latest",
         "node-restful": "latest",
