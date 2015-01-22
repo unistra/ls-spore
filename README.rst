@@ -1,6 +1,6 @@
 lsc-spore
 =========
-A livescript spore client
+A client-side livescript/javascript spore client
 
 
 Usage
