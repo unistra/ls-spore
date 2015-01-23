@@ -7,11 +7,11 @@
     function SporeRequest(finalEnv){
       this.env = clone$(finalEnv);
     }
-    prototype.call = function(callback){
+    prototype.call = function(success, error){
       var urlTemplate, url, query;
       urlTemplate = this._generateUrlTemplate();
       url = this._generateFinalUrl(urlTemplate);
-      return query = this._doRequest(url, callback);
+      return query = this._doRequest(url, success, error);
     };
     prototype._generateUrlTemplate = function(){
       var urlTemplate;
@@ -43,7 +43,7 @@
       finalUrl = urlTemplate + this.env.QUERY_STRING;
       return finalUrl;
     };
-    prototype._doRequest = function(url, callback){
+    prototype._doRequest = function(url, success, error){
       var xhr, k, ref$, v, this$ = this;
       xhr = new XMLHttpRequest;
       xhr.open(this.env.REQUEST_METHOD, url, true);
@@ -56,18 +56,26 @@
         xhr.overrideMimeType('application/json');
       }
       xhr.onreadystatechange = function(){
-        var ref$, myJson, e;
+        var ref$, myJson, e, errorMsg;
         if (xhr.readyState === 4) {
           if ((ref$ = xhr.status) === 200 || ref$ === 201 || ref$ === 202 || ref$ === 203 || ref$ === 204 || ref$ === 205 || ref$ === 206 || ref$ === 0) {
             try {
               myJson = xhr.responseText !== "" ? JSON.parse(xhr.responseText) : "";
-              callback(myJson);
+              success(myJson);
             } catch (e$) {
               e = e$;
-              window.console.error("Spore error: cannot parse json method response");
+              errorMsg = "Spore error: cannot parse json method response";
+              window.console.error(errorMsg);
+              error({
+                error: errorMsg
+              });
             }
           } else {
-            window.console.error("Spore error: Call " + url);
+            errorMsg = "Spore error: Call " + url;
+            window.console.error(errorMsg);
+            error({
+              error: errorMsg
+            });
           }
         }
       };

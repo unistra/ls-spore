@@ -32,9 +32,16 @@ Example :
               }, function(response){
                 console.log("Recuperation de toto ... :");
                 return console.log(response);
+              }, 
+              function(){
+                console.log("Error with the spore method");
               });
             }
-          }, base_url = "http://127.0.0.1:8000");
+          },
+          function(){
+            console.log("Error with the spore client creation");
+          },
+          base_url = "http://127.0.0.1:8000");
         </script>
     </head>
     <body>

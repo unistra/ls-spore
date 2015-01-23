@@ -2,7 +2,7 @@ class SporeMethodsFactory
 
     create-method: (name, method-specs, middlewares) ->
 
-        method = (params, callable) ->
+        method = (params, success, error) ->
 
             pop-payload = ->
                 payload = if params.payload? then params.payload else {}
@@ -54,24 +54,24 @@ class SporeMethodsFactory
                 add-headers!
                 final-env = method-specs.env
                 request = new SporeRequest(final-env)
-                request.call callable
+                request.call success, error
             else window.console.error "Spore error: wrong parameters of #{name}"
 
         return method
 
 
 class Spore
-    (url, callback, base_url=void) ->
+    (url, success, error, base_url=void) ->
         @url = url
         @base-url = base_url
         @is-ready = false
         @description = {}
-        @create callback
+        @create success, error
         @methods = {}
         @methods-specs = {}
         @middlewares = []
 
-    create: (callback) ->
+    create: (success, error) ->
         xhr = new XMLHttpRequest
         xhr.open 'GET', @url, true
         xhr.override-mime-type 'application/json' if 'overrideMimeType' in xhr
@@ -81,10 +81,15 @@ class Spore
                 then
                     try
                         my-json = JSON.parse(xhr.response-text)
-                        @_call-callback(my-json, callback)
+                        @_call-callback(my-json, success)
                     catch
-                        window.console.error "Spore error: cannot parse json description file"
-                else window.console.error "Spore error: #{xhr.status} #{xhr.statusText}"
+                        error-msg = "Spore error: cannot parse json description file"
+                        window.console.error error-msg
+                        error {error:error-msg}
+                else
+                    error-msg = "Spore error: #{xhr.status} #{xhr.statusText}"
+                    window.console.error error-msg
+                    error {error:error-msg}
         xhr.send null
         xhr
 

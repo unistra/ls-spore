@@ -6,7 +6,7 @@
     var prototype = SporeMethodsFactory.prototype, constructor = SporeMethodsFactory;
     prototype.createMethod = function(name, methodSpecs, middlewares){
       var method;
-      method = function(params, callable){
+      method = function(params, success, error){
         var popPayload, checkRequireParams, checkWrongParams, applyMiddlewares, addParams, addPayload, addHeaders, payload, finalEnv, request;
         popPayload = function(){
           var payload;
@@ -82,7 +82,7 @@
           addHeaders();
           finalEnv = methodSpecs.env;
           request = new SporeRequest(finalEnv);
-          return request.call(callable);
+          return request.call(success, error);
         } else {
           return window.console.error("Spore error: wrong parameters of " + name);
         }
@@ -95,18 +95,18 @@
   Spore = (function(){
     Spore.displayName = 'Spore';
     var prototype = Spore.prototype, constructor = Spore;
-    function Spore(url, callback, base_url){
+    function Spore(url, success, error, base_url){
       base_url == null && (base_url = void 8);
       this.url = url;
       this.baseUrl = base_url;
       this.isReady = false;
       this.description = {};
-      this.create(callback);
+      this.create(success, error);
       this.methods = {};
       this.methodsSpecs = {};
       this.middlewares = [];
     }
-    prototype.create = function(callback){
+    prototype.create = function(success, error){
       var xhr, this$ = this;
       xhr = new XMLHttpRequest;
       xhr.open('GET', this.url, true);
@@ -114,18 +114,26 @@
         xhr.overrideMimeType('application/json');
       }
       xhr.onreadystatechange = function(){
-        var ref$, myJson, e;
+        var ref$, myJson, e, errorMsg;
         if (xhr.readyState === 4) {
           if ((ref$ = xhr.status) === 200 || ref$ === 0) {
             try {
               myJson = JSON.parse(xhr.responseText);
-              this$._callCallback(myJson, callback);
+              this$._callCallback(myJson, success);
             } catch (e$) {
               e = e$;
-              window.console.error("Spore error: cannot parse json description file");
+              errorMsg = "Spore error: cannot parse json description file";
+              window.console.error(errorMsg);
+              error({
+                error: errorMsg
+              });
             }
           } else {
-            window.console.error("Spore error: " + xhr.status + " " + xhr.statusText);
+            errorMsg = "Spore error: " + xhr.status + " " + xhr.statusText;
+            window.console.error(errorMsg);
+            error({
+              error: errorMsg
+            });
           }
         }
       };

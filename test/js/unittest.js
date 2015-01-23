@@ -10,7 +10,7 @@
       this.routeDeleteOne = void 8;
       return this.client = new Spore('/base/data/description.json', function(){
         return done();
-      }, base_url = 'http://localhost:3000/api');
+      }, function(){}, base_url = 'http://localhost:3000/api');
     });
     return describe('Test client', function(x){
       it('initialize Spore client', function(){
@@ -40,7 +40,7 @@
           }, function(response){
             this$.routePost = response;
             return done();
-          });
+          }, function(error){});
         });
         return it('No token add product', function(){
           return expect(this.routePost.error).toEqual("No credentials sent!");
@@ -62,7 +62,7 @@
           }, function(response){
             this$.routePost = response;
             return done();
-          });
+          }, function(error){});
         });
         return it('No token add product', function(){
           return expect(this.routePost.error).toEqual("Wrong token");
@@ -89,7 +89,7 @@
           }, function(response){
             this$.routePost = response;
             return done();
-          });
+          }, function(error){});
         });
         it('add product', function(){
           expect(this.routePost.name).toEqual("voiture");
@@ -104,7 +104,7 @@
             }, function(response){
               this$.routeGetList = response;
               return done();
-            });
+            }, function(error){});
           });
           return it('get products', function(){
             expect(this.routeGetList.length).toBeGreaterThan(0);
@@ -121,7 +121,7 @@
             }, function(response){
               this$.routeGetOne = response;
               return done();
-            });
+            }, function(error){});
           });
           return it('get one product', function(){
             expect(this.routeGetOne.name).toEqual("voiture");
@@ -137,7 +137,7 @@
             }, function(response){
               this$.routeDeleteOne = response;
               return done();
-            });
+            }, function(error){});
           });
           return it('delete one product', function(){
             return expect(this.routeDeleteOne).toEqual("");

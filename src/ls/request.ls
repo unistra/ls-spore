@@ -2,10 +2,10 @@ class SporeRequest
     (final-env) ->
         @env=^^final-env
 
-    call: (callback)->
+    call: (success, error)->
         url-template = @_generate-url-template!
         url = @_generate-final-url url-template
-        query = @_do-request(url, callback)
+        query = @_do-request(url, success, error)
 
     _generate-url-template: ->
         url-template = @env.spore.scheme + "://" + @env.SERVER_NAME
@@ -31,7 +31,7 @@ class SporeRequest
 
         final-url
 
-    _do-request: (url, callback) ->
+    _do-request: (url, success, error) ->
         xhr = new XMLHttpRequest
         xhr.open @env.REQUEST_METHOD, url, true
         xhr.set-request-header "Content-Type", 'application/json'
@@ -45,10 +45,15 @@ class SporeRequest
                 then
                     try
                         my-json = if xhr.response-text!="" then JSON.parse(xhr.response-text) else ""
-                        callback(my-json)
+                        success(my-json)
                     catch
-                        window.console.error "Spore error: cannot parse json method response"
-                else window.console.error "Spore error: Call #{url}"
+                        error-msg = "Spore error: cannot parse json method response"
+                        window.console.error error-msg
+                        error {error:error-msg}
+                else
+                    error-msg = "Spore error: Call #{url}"
+                    window.console.error error-msg
+                    error {error:error-msg}
         if Object.keys(@env.spore.payload).length > 0
         then
             xhr.send JSON.stringify @env.spore.payload

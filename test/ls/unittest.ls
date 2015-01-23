@@ -8,7 +8,11 @@ describe 'Spore',(x) ->
         @route-delete-one = void
         @client = new Spore  \/base/data/description.json, (->
             done!
-        ), base_url=\http://localhost:3000/api
+        ), 
+        (->
+            void
+        ),
+        base_url=\http://localhost:3000/api
 
 
     describe 'Test client',(x) ->
@@ -46,6 +50,9 @@ describe 'Spore',(x) ->
                 }, (response) ~>
                     @route-post = response
                     done!
+                ,
+                   (error) ~>
+                    void
 
             it 'No token add product', ->
                 expect @route-post.error .toEqual "No credentials sent!"
@@ -65,6 +72,9 @@ describe 'Spore',(x) ->
                 }, (response) ~>
                     @route-post = response
                     done!
+                ,
+                   (error) ~>
+                    void
 
             it 'No token add product', ->
                 expect @route-post.error .toEqual "Wrong token"
@@ -90,6 +100,9 @@ describe 'Spore',(x) ->
                 }, (response) ~>
                     @route-post = response
                     done()
+                ,
+                   (error) ~>
+                    void
 
             it 'add product', ->
                 expect(@route-post.name).toEqual("voiture")
@@ -105,6 +118,9 @@ describe 'Spore',(x) ->
                     }, (response) ~>
                         @route-get-list = response
                         done!
+                    ,
+                       (error) ~>
+                        void
 
                 it 'get products', ->
                     expect @route-get-list.length .toBeGreaterThan 0
@@ -120,6 +136,9 @@ describe 'Spore',(x) ->
                     }, (response) ~>
                         @route-get-one = response
                         done()
+                    ,
+                       (error) ~>
+                        void
 
                 it 'get one product', ->
                     expect(@route-get-one.name).toEqual("voiture")
@@ -136,6 +155,9 @@ describe 'Spore',(x) ->
                     }, (response) ~>
                         @route-delete-one = response
                         done()
+                    ,
+                       (error) ~>
+                        void
 
                 it 'delete one product', ->
                     expect(@route-delete-one).toEqual("")
