@@ -9,9 +9,18 @@ A client-side livescript/javascript spore client
 
 Usage
 =====
-Include and use "spore-client.min.js".
 
-Example :
+Install with bower
+------------------
+
+.. code-block:: bash
+
+    bower install ls-spore
+
+Example
+-------
+
+Include and use "build/spore-client.min.js" :
 
 .. code-block:: html
 
