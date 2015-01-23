@@ -5,13 +5,13 @@
         "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js"
     },
     "dependencies": {
-        "karma": "latest",
-        "karma-jasmine": "latest",
-        "karma-chrome-launcher": "latest",
-        "karma-phantomjs-launcher": "latest",
-        "express": "latest",
-        "mongoose": "latest",
-        "node-restful": "latest",
-        "body-parser": "latest"
+        "karma": "~0.12.31",
+        "karma-jasmine": "~0.3.5",
+        "karma-chrome-launcher": "~0.1.7",
+        "karma-phantomjs-launcher": "~0.1.4",
+        "express": "~4.11.1",
+        "mongoose": "~3.8.21",
+        "node-restful": "~0.1.17",
+        "body-parser": "~1.10.2"
     }
 }
