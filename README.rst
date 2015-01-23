@@ -129,7 +129,6 @@ TODO
 ----
 
 * put client's meta data in a _meta variable and remove methods variable
-* remove references to spore-lsc
 * be more livescript idiomatic
 
 
