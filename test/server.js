@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
   }
 });
 // Clean and connect to Database 
-mongoose.connect("mongodb://localhost/sporelscunittest");
+mongoose.connect("mongodb://localhost/lssporeunittest");
 var db = mongoose.connection
 var ProductSchema = mongoose.Schema({
     name: String,

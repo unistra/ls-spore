@@ -1,8 +1,8 @@
-lsc-spore
+ls-spore
 =========
 
-.. image:: https://travis-ci.org/unistra/lsc-spore.svg?branch=master
-    :target: https://travis-ci.org/unistra/lsc-spore
+.. image:: https://travis-ci.org/unistra/ls-spore.svg?branch=master
+    :target: https://travis-ci.org/unistra/ls-spore
 
 A client-side livescript/javascript spore client
 
@@ -18,7 +18,7 @@ Example :
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Spore-lsc example</title>
+        <title>ls-spore example</title>
         <script src="build/spore-client.min.js" type="text/javascript"></script>
         <script type="text/javascript">
             s = new Spore("http://serverurl/spore-description.json", function(){
@@ -52,8 +52,8 @@ use the following lines to compile livescript to javascript :
 .. code-block:: bash
 
     sudo npm install -g LiveScript
-    lsc -wc src/lsc/*.lsc -o src/js/
-    lsc -wc test/lsc/*.lsc -o test/js/
+    lsc -wc src/ls/*.ls -o src/js/
+    lsc -wc test/ls/*.ls -o test/js/
 
 use the following line to create a minified JS
 
