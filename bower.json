@@ -1,0 +1,27 @@
+{
+  "name": "ls-spore",
+  "version": "0.1.1",
+  "homepage": "https://github.com/unistra/ls-spore",
+  "authors": [
+    "Morgan <morgan.bohn@unistra.fr>"
+  ],
+  "description": "A client-side livescript/javascript spore client",
+  "main": "build/spore-client.min.js",
+  "keywords": [
+    "spore",
+    "client",
+    "javascript",
+    "livescript",
+    "rest",
+    "api",
+    "webservice"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
