@@ -6,7 +6,7 @@
     "Morgan <morgan.bohn@unistra.fr>"
   ],
   "description": "A client-side livescript/javascript spore client",
-  "main": "build/spore-client.min.js",
+  "main": "./build/spore-client.min.js",
   "keywords": [
     "spore",
     "client",
