@@ -1,19 +1,19 @@
 class SporeMethodsFactory
 
-    create-method: (name, method-specs, middlewares) ->
+    create-method: (name, desc, env, middlewares) ->
 
         method = (params, success, error) ->
 
             pop-payload = ->
                 payload = if params.payload? then params.payload else {}
                 delete params.payload
-                if method-specs.required_payload? and method-specs.required_payload==true and Object.keys(payload).length==0
+                if desc.required_payload? and desc.required_payload==true and Object.keys(payload).length==0
                     window.console.error "Spore error: payload is required"
                 payload
 
             check-require-params = ->
-                check-required-params=[k for k in method-specs.required-params]
-                for k in method-specs.required-params
+                check-required-params=[k for k in desc.required-params]
+                for k in desc.required-params
                     if params[k]?
                     then check-required-params.pop k
                 check-required-params.length==0
@@ -21,28 +21,28 @@ class SporeMethodsFactory
             check-wrong-params = ->
                 check = true
                 for k,v of params
-                    if method-specs.required-params.indexOf(k)>-1 or method-specs.optional-params.indexOf(k)>-1
+                    if desc.required-params.indexOf(k)>-1 or desc.optional-params.indexOf(k)>-1
                     then continue
                     else check=false
                 check
 
             apply-middlewares = ->
-                method-specs.env.spore.headers = {}
+                env.spore.headers = {}
                 for m in middlewares
                     middleware-instance = new m['middlewareClass'] m['params']
-                    middleware-instance.call method-specs.env
+                    middleware-instance.call env
 
 
             add-params = ->
-                method-specs.env.spore.params = params
+                env.spore.params = params
 
             add-payload = (payload) ->
-                method-specs.env.spore.payload = payload
+                env.spore.payload = payload
 
             add-headers = ->
-                for k, v of method-specs.headers
-                    if (not) method-specs.env.spore.headers[k]?
-                    then method-specs.env.spore.headers[k] = v
+                for k, v of desc.headers
+                    if (not) env.spore.headers[k]?
+                    then env.spore.headers[k] = v
 
             # call request
             payload = pop-payload!
@@ -52,8 +52,7 @@ class SporeMethodsFactory
                 add-params!
                 add-payload payload
                 add-headers!
-                final-env = method-specs.env
-                request = new SporeRequest final-env
+                request = new SporeRequest env
                 request.call success, error
             else window.console.error "Spore error: wrong parameters of #{name}"
 
@@ -68,7 +67,7 @@ class Spore
         @description = {}
         @create success, error
         @methods = {}
-        @methods-specs = {}
+        @methods-env = {}
         @middlewares = []
 
     create: (success, error) ->
@@ -110,41 +109,34 @@ class Spore
     _generate-methods: (methods) ->
         my-factory = new SporeMethodsFactory!
         for key, value of methods
-            @_generate-methods-specs key, value
             @_generate-methods-env key, value
-            @['methods'][key] = my-factory.create-method key, @methods-specs[key], @middlewares
-
-    _generate-methods-specs: (method-key, method-value)->
-        @methods-specs[method-key] = {}
-        for k, v of method-value
-            if k!="env"
-                @methods-specs[method-key][k] = v
+            @['methods'][key] = my-factory.create-method key,@description.methods[key], @methods-env[key], @middlewares
 
     _generate-methods-env: (method-key, method-value)->
         url_parser = document.createElement 'a'
         url_parser.href = @_get-base-url method-key, method-value
 
-        @methods-specs[method-key].env = {}
-        @methods-specs[method-key].env.REQUEST_METHOD = @_get-request-method method-value.method
-        @methods-specs[method-key].env.SERVER_NAME = url_parser.hostname
-        @methods-specs[method-key].env.SERVER_PORT = @_get-server-port url_parser
-        @methods-specs[method-key].env.SCRIPT_NAME = @_get-script-name url_parser.pathname
-        @methods-specs[method-key].env.PATH_INFO = @_get-path-info @methods-specs[method-key].env.SCRIPT_NAME, url_parser.pathname, method-value.path
-        @methods-specs[method-key].env.QUERY_STRING = ""
+        @methods-env[method-key] = {}
+        @methods-env[method-key].REQUEST_METHOD = @_get-request-method method-value.method
+        @methods-env[method-key].SERVER_NAME = url_parser.hostname
+        @methods-env[method-key].SERVER_PORT = @_get-server-port url_parser
+        @methods-env[method-key].SCRIPT_NAME = @_get-script-name url_parser.pathname
+        @methods-env[method-key].PATH_INFO = @_get-path-info @methods-env[method-key].SCRIPT_NAME, url_parser.pathname, method-value.path
+        @methods-env[method-key].QUERY_STRING = ""
 
-        @methods-specs[method-key].env.spore = {}
+        @methods-env[method-key].spore = {}
         #TODO expected_status
-        @methods-specs[method-key].env.spore.expected_status = method-value.expected_status
+        @methods-env[method-key].spore.expected_status = method-value.expected_status
         #TODO authentication
-        @methods-specs[method-key].env.spore.authentication = @_get-authentication method-value.authentication
-        @methods-specs[method-key].env.spore.params = {}
-        @methods-specs[method-key].env.spore.payload = {}
+        @methods-env[method-key].spore.authentication = @_get-authentication method-value.authentication
+        @methods-env[method-key].spore.params = {}
+        @methods-env[method-key].spore.payload = {}
         #TODO errors
-        @methods-specs[method-key].env.spore.errors = {}
-        @methods-specs[method-key].env.spore.headers = {}
+        @methods-env[method-key].spore.errors = {}
+        @methods-env[method-key].spore.headers = {}
         #TODO formats
-        @methods-specs[method-key].env.spore.formats = method-value.formats
-        @methods-specs[method-key].env.spore.scheme = url_parser.protocol.split(":")[0]
+        @methods-env[method-key].spore.formats = method-value.formats
+        @methods-env[method-key].spore.scheme = url_parser.protocol.split(":")[0]
 
 
     _get-authentication: (method-authentication)->

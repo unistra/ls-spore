@@ -4,17 +4,17 @@
   SporeMethodsFactory = (function(){
     SporeMethodsFactory.displayName = 'SporeMethodsFactory';
     var prototype = SporeMethodsFactory.prototype, constructor = SporeMethodsFactory;
-    prototype.createMethod = function(name, methodSpecs, middlewares){
+    prototype.createMethod = function(name, desc, env, middlewares){
       var method;
       method = function(params, success, error){
-        var popPayload, checkRequireParams, checkWrongParams, applyMiddlewares, addParams, addPayload, addHeaders, payload, finalEnv, request;
+        var popPayload, checkRequireParams, checkWrongParams, applyMiddlewares, addParams, addPayload, addHeaders, payload, request;
         popPayload = function(){
           var payload;
           payload = params.payload != null
             ? params.payload
             : {};
           delete params.payload;
-          if (methodSpecs.required_payload != null && methodSpecs.required_payload === true && Object.keys(payload).length === 0) {
+          if (desc.required_payload != null && desc.required_payload === true && Object.keys(payload).length === 0) {
             window.console.error("Spore error: payload is required");
           }
           return payload;
@@ -22,12 +22,12 @@
         checkRequireParams = function(){
           var checkRequiredParams, res$, i$, ref$, len$, k;
           res$ = [];
-          for (i$ = 0, len$ = (ref$ = methodSpecs.requiredParams).length; i$ < len$; ++i$) {
+          for (i$ = 0, len$ = (ref$ = desc.requiredParams).length; i$ < len$; ++i$) {
             k = ref$[i$];
             res$.push(k);
           }
           checkRequiredParams = res$;
-          for (i$ = 0, len$ = (ref$ = methodSpecs.requiredParams).length; i$ < len$; ++i$) {
+          for (i$ = 0, len$ = (ref$ = desc.requiredParams).length; i$ < len$; ++i$) {
             k = ref$[i$];
             if (params[k] != null) {
               checkRequiredParams.pop(k);
@@ -40,7 +40,7 @@
           check = true;
           for (k in ref$ = params) {
             v = ref$[k];
-            if (methodSpecs.requiredParams.indexOf(k) > -1 || methodSpecs.optionalParams.indexOf(k) > -1) {
+            if (desc.requiredParams.indexOf(k) > -1 || desc.optionalParams.indexOf(k) > -1) {
               continue;
             } else {
               check = false;
@@ -50,26 +50,26 @@
         };
         applyMiddlewares = function(){
           var i$, ref$, len$, m, middlewareInstance, results$ = [];
-          methodSpecs.env.spore.headers = {};
+          env.spore.headers = {};
           for (i$ = 0, len$ = (ref$ = middlewares).length; i$ < len$; ++i$) {
             m = ref$[i$];
             middlewareInstance = new m['middlewareClass'](m['params']);
-            results$.push(middlewareInstance.call(methodSpecs.env));
+            results$.push(middlewareInstance.call(env));
           }
           return results$;
         };
         addParams = function(){
-          return methodSpecs.env.spore.params = params;
+          return env.spore.params = params;
         };
         addPayload = function(payload){
-          return methodSpecs.env.spore.payload = payload;
+          return env.spore.payload = payload;
         };
         addHeaders = function(){
           var k, ref$, v, results$ = [];
-          for (k in ref$ = methodSpecs.headers) {
+          for (k in ref$ = desc.headers) {
             v = ref$[k];
-            if (not$(methodSpecs.env.spore.headers[k] != null)) {
-              results$.push(methodSpecs.env.spore.headers[k] = v);
+            if (not$(env.spore.headers[k] != null)) {
+              results$.push(env.spore.headers[k] = v);
             }
           }
           return results$;
@@ -80,8 +80,7 @@
           addParams();
           addPayload(payload);
           addHeaders();
-          finalEnv = methodSpecs.env;
-          request = new SporeRequest(finalEnv);
+          request = new SporeRequest(env);
           return request.call(success, error);
         } else {
           return window.console.error("Spore error: wrong parameters of " + name);
@@ -103,7 +102,7 @@
       this.description = {};
       this.create(success, error);
       this.methods = {};
-      this.methodsSpecs = {};
+      this.methodsEnv = {};
       this.middlewares = [];
     }
     prototype.create = function(success, error){
@@ -162,20 +161,8 @@
       myFactory = new SporeMethodsFactory();
       for (key in methods) {
         value = methods[key];
-        this._generateMethodsSpecs(key, value);
         this._generateMethodsEnv(key, value);
-        results$.push(this['methods'][key] = myFactory.createMethod(key, this.methodsSpecs[key], this.middlewares));
-      }
-      return results$;
-    };
-    prototype._generateMethodsSpecs = function(methodKey, methodValue){
-      var k, v, results$ = [];
-      this.methodsSpecs[methodKey] = {};
-      for (k in methodValue) {
-        v = methodValue[k];
-        if (k !== "env") {
-          results$.push(this.methodsSpecs[methodKey][k] = v);
-        }
+        results$.push(this['methods'][key] = myFactory.createMethod(key, this.description.methods[key], this.methodsEnv[key], this.middlewares));
       }
       return results$;
     };
@@ -183,22 +170,22 @@
       var url_parser;
       url_parser = document.createElement('a');
       url_parser.href = this._getBaseUrl(methodKey, methodValue);
-      this.methodsSpecs[methodKey].env = {};
-      this.methodsSpecs[methodKey].env.REQUEST_METHOD = this._getRequestMethod(methodValue.method);
-      this.methodsSpecs[methodKey].env.SERVER_NAME = url_parser.hostname;
-      this.methodsSpecs[methodKey].env.SERVER_PORT = this._getServerPort(url_parser);
-      this.methodsSpecs[methodKey].env.SCRIPT_NAME = this._getScriptName(url_parser.pathname);
-      this.methodsSpecs[methodKey].env.PATH_INFO = this._getPathInfo(this.methodsSpecs[methodKey].env.SCRIPT_NAME, url_parser.pathname, methodValue.path);
-      this.methodsSpecs[methodKey].env.QUERY_STRING = "";
-      this.methodsSpecs[methodKey].env.spore = {};
-      this.methodsSpecs[methodKey].env.spore.expected_status = methodValue.expected_status;
-      this.methodsSpecs[methodKey].env.spore.authentication = this._getAuthentication(methodValue.authentication);
-      this.methodsSpecs[methodKey].env.spore.params = {};
-      this.methodsSpecs[methodKey].env.spore.payload = {};
-      this.methodsSpecs[methodKey].env.spore.errors = {};
-      this.methodsSpecs[methodKey].env.spore.headers = {};
-      this.methodsSpecs[methodKey].env.spore.formats = methodValue.formats;
-      return this.methodsSpecs[methodKey].env.spore.scheme = url_parser.protocol.split(":")[0];
+      this.methodsEnv[methodKey] = {};
+      this.methodsEnv[methodKey].REQUEST_METHOD = this._getRequestMethod(methodValue.method);
+      this.methodsEnv[methodKey].SERVER_NAME = url_parser.hostname;
+      this.methodsEnv[methodKey].SERVER_PORT = this._getServerPort(url_parser);
+      this.methodsEnv[methodKey].SCRIPT_NAME = this._getScriptName(url_parser.pathname);
+      this.methodsEnv[methodKey].PATH_INFO = this._getPathInfo(this.methodsEnv[methodKey].SCRIPT_NAME, url_parser.pathname, methodValue.path);
+      this.methodsEnv[methodKey].QUERY_STRING = "";
+      this.methodsEnv[methodKey].spore = {};
+      this.methodsEnv[methodKey].spore.expected_status = methodValue.expected_status;
+      this.methodsEnv[methodKey].spore.authentication = this._getAuthentication(methodValue.authentication);
+      this.methodsEnv[methodKey].spore.params = {};
+      this.methodsEnv[methodKey].spore.payload = {};
+      this.methodsEnv[methodKey].spore.errors = {};
+      this.methodsEnv[methodKey].spore.headers = {};
+      this.methodsEnv[methodKey].spore.formats = methodValue.formats;
+      return this.methodsEnv[methodKey].spore.scheme = url_parser.protocol.split(":")[0];
     };
     prototype._getAuthentication = function(methodAuthentication){
       if (methodAuthentication != null) {
