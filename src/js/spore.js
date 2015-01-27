@@ -169,7 +169,7 @@
     prototype._generateMethodsEnv = function(methodKey, methodValue){
       var url_parser;
       url_parser = document.createElement('a');
-      url_parser.href = this._getBaseUrl(methodKey, methodValue);
+      url_parser.href = this._getBaseUrl(methodValue);
       this.methodsEnv[methodKey] = {};
       this.methodsEnv[methodKey].REQUEST_METHOD = this._getRequestMethod(methodValue.method);
       this.methodsEnv[methodKey].SERVER_NAME = url_parser.hostname;
@@ -244,7 +244,7 @@
       this.isReady = true;
       return callback();
     };
-    prototype._getBaseUrl = function(key, value){
+    prototype._getBaseUrl = function(value){
       if (this.baseUrl != null) {
         return this.baseUrl;
       } else if (value.base_url != null) {

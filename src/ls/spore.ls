@@ -114,7 +114,7 @@ class Spore
 
     _generate-methods-env: (method-key, method-value)->
         url_parser = document.createElement 'a'
-        url_parser.href = @_get-base-url method-key, method-value
+        url_parser.href = @_get-base-url method-value
 
         @methods-env[method-key] = {}
         @methods-env[method-key].REQUEST_METHOD = @_get-request-method method-value.method
@@ -183,7 +183,7 @@ class Spore
         @is-ready = true
         callback!
 
-    _get-base-url: (key, value) ->
+    _get-base-url: (value) ->
             if @base-url? then return @base-url
             else if value.base_url? then return value.base_url
             else if @description.base_url? then return @description.base_url
