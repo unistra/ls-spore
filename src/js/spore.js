@@ -14,7 +14,7 @@
             ? params.payload
             : {};
           delete params.payload;
-          if (methodSpecs.required_payload && (not$(params.payload != null) || (params.payload = ""))) {
+          if (methodSpecs.required_payload != null && methodSpecs.required_payload === true && Object.keys(payload).length === 0) {
             window.console.error("Spore error: payload is required");
           }
           return payload;
@@ -170,11 +170,11 @@
     };
     prototype._generateMethodsSpecs = function(methodKey, methodValue){
       var k, v, results$ = [];
+      this.methodsSpecs[methodKey] = {};
       for (k in methodValue) {
         v = methodValue[k];
         if (k !== "env") {
-          this.methodsSpecs[methodKey] = {};
-          results$.push(this.methodsSpecs[k] = v);
+          results$.push(this.methodsSpecs[methodKey][k] = v);
         }
       }
       return results$;

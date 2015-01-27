@@ -29,14 +29,114 @@ describe 'Spore',(x) ->
             expect @client.base-url .toBe \http://localhost:3000/api
             expect @client.description.name .toBe 'TEST API'
 
-        it 'check client method specs', ->
+        it 'check client methods specs add product', ->
+            #basics
             expect @client.methods-specs.add_product? .toBe true
+            expect @client.methods-specs.add_product.path .toBe "/products"
+            expect @client.methods-specs.add_product.required_params.length .toBe 0
+            expect @client.methods-specs.add_product.optional_params.length .toBe 0
+            expect @client.methods-specs.add_product.required_payload .toBe true
+            expect @client.methods-specs.add_product.method .toBe "POST"
+            expect @client.methods-specs.add_product.authentication .toBe true
+            expect @client.methods-specs.add_product.documentation .toBe "Add a product"
+            #env
+            expect @client.methods-specs.add_product.env.REQUEST_METHOD .toBe "POST"
+            expect @client.methods-specs.add_product.env.SERVER_NAME .toBe "localhost"
+            expect @client.methods-specs.add_product.env.SERVER_PORT .toBe 3000
+            expect @client.methods-specs.add_product.env.SCRIPT_NAME .toBe "/api"
+            expect @client.methods-specs.add_product.env.PATH_INFO .toBe "/products"
+            expect @client.methods-specs.add_product.env.QUERY_STRING .toBe ""
+            #env spore
+            expect @client.methods-specs.add_product.env.spore.expected_status .toBe void
+            expect @client.methods-specs.add_product.env.spore.authentication .toBe true
+            expect Object.keys(@client.methods-specs.add_product.env.spore.params).length .toBe 0
+            expect Object.keys(@client.methods-specs.add_product.env.spore.payload).length .toBe 0
+            expect Object.keys(@client.methods-specs.add_product.env.spore.errors).length .toBe 0
+            expect Object.keys(@client.methods-specs.add_product.env.spore.headers).length .toBe 0
+            expect @client.methods-specs.add_product.env.spore.formats .toBe void
+            expect @client.methods-specs.add_product.env.spore.scheme .toBe "http"
 
-        # #TODO
-        # it 'check client methods specs details', ->
-        #     expect(true).toBe(true)
+        it 'check client methods specs get products', ->
+            #basics
+            expect @client.methods-specs.get_products? .toBe true
+            expect @client.methods-specs.get_products.path .toBe "/products"
+            expect @client.methods-specs.get_products.required_params.length .toBe 0
+            expect @client.methods-specs.get_products.optional_params.length .toBe 3
+            expect @client.methods-specs.get_products.required_payload .toBe void
+            expect @client.methods-specs.get_products.method .toBe "GET"
+            expect @client.methods-specs.get_products.authentication .toBe true
+            expect @client.methods-specs.get_products.documentation .toBe "Get products"
+            #env
+            expect @client.methods-specs.get_products.env.REQUEST_METHOD .toBe "GET"
+            expect @client.methods-specs.get_products.env.SERVER_NAME .toBe "localhost"
+            expect @client.methods-specs.get_products.env.SERVER_PORT .toBe 3000
+            expect @client.methods-specs.get_products.env.SCRIPT_NAME .toBe "/api"
+            expect @client.methods-specs.get_products.env.PATH_INFO .toBe "/products"
+            expect @client.methods-specs.get_products.env.QUERY_STRING .toBe ""
+            #env spore
+            expect @client.methods-specs.get_products.env.spore.expected_status .toBe void
+            expect @client.methods-specs.get_products.env.spore.authentication .toBe true
+            expect Object.keys(@client.methods-specs.get_products.env.spore.params).length .toBe 0
+            expect Object.keys(@client.methods-specs.get_products.env.spore.payload).length .toBe 0
+            expect Object.keys(@client.methods-specs.get_products.env.spore.errors).length .toBe 0
+            expect Object.keys(@client.methods-specs.get_products.env.spore.headers).length .toBe 0
+            expect @client.methods-specs.get_products.env.spore.formats .toBe void
+            expect @client.methods-specs.get_products.env.spore.scheme .toBe "http"
+
+        it 'check client methods specs get product', ->
+            #basics
+            expect @client.methods-specs.get_product? .toBe true
+            expect @client.methods-specs.get_product.path .toBe "/products/:id"
+            expect @client.methods-specs.get_product.required_params.length .toBe 1
+            expect @client.methods-specs.get_product.optional_params.length .toBe 0
+            expect @client.methods-specs.get_product.required_payload .toBe void
+            expect @client.methods-specs.get_product.method .toBe "GET"
+            expect @client.methods-specs.get_product.authentication .toBe true
+            expect @client.methods-specs.get_product.documentation .toBe "Get one product"
+            #env
+            expect @client.methods-specs.get_product.env.REQUEST_METHOD .toBe "GET"
+            expect @client.methods-specs.get_product.env.SERVER_NAME .toBe "localhost"
+            expect @client.methods-specs.get_product.env.SERVER_PORT .toBe 3000
+            expect @client.methods-specs.get_product.env.SCRIPT_NAME .toBe "/api"
+            expect @client.methods-specs.get_product.env.PATH_INFO .toBe "/products/:id"
+            expect @client.methods-specs.get_product.env.QUERY_STRING .toBe ""
+            #env spore
+            expect @client.methods-specs.get_product.env.spore.expected_status .toBe void
+            expect @client.methods-specs.get_product.env.spore.authentication .toBe true
+            expect Object.keys(@client.methods-specs.get_product.env.spore.params).length .toBe 0
+            expect Object.keys(@client.methods-specs.get_product.env.spore.payload).length .toBe 0
+            expect Object.keys(@client.methods-specs.get_product.env.spore.errors).length .toBe 0
+            expect Object.keys(@client.methods-specs.get_product.env.spore.headers).length .toBe 0
+            expect @client.methods-specs.get_product.env.spore.formats .toBe void
+            expect @client.methods-specs.get_product.env.spore.scheme .toBe "http"
 
 
+        it 'check client methods specs delete product', ->
+            #basics
+            expect @client.methods-specs.delete_product? .toBe true
+            expect @client.methods-specs.delete_product.path .toBe "/products/:id"
+            expect @client.methods-specs.delete_product.required_params.length .toBe 1
+            expect @client.methods-specs.delete_product.optional_params.length .toBe 0
+            expect @client.methods-specs.delete_product.required_payload .toBe void
+            expect @client.methods-specs.delete_product.method .toBe "DELETE"
+            expect @client.methods-specs.delete_product.authentication .toBe true
+            expect @client.methods-specs.delete_product.documentation .toBe "delete one product"
+            #env
+            expect @client.methods-specs.delete_product.env.REQUEST_METHOD .toBe "DELETE"
+            expect @client.methods-specs.delete_product.env.SERVER_NAME .toBe "localhost"
+            expect @client.methods-specs.delete_product.env.SERVER_PORT .toBe 3000
+            expect @client.methods-specs.delete_product.env.SCRIPT_NAME .toBe "/api"
+            expect @client.methods-specs.delete_product.env.PATH_INFO .toBe "/products/:id"
+            expect @client.methods-specs.delete_product.env.QUERY_STRING .toBe ""
+            #env spore
+            expect @client.methods-specs.delete_product.env.spore.expected_status .toBe void
+            expect @client.methods-specs.delete_product.env.spore.authentication .toBe true
+            expect Object.keys(@client.methods-specs.delete_product.env.spore.params).length .toBe 0
+            expect Object.keys(@client.methods-specs.delete_product.env.spore.payload).length .toBe 0
+            expect Object.keys(@client.methods-specs.delete_product.env.spore.errors).length .toBe 0
+            expect Object.keys(@client.methods-specs.delete_product.env.spore.headers).length .toBe 0
+            expect @client.methods-specs.delete_product.env.spore.formats .toBe void
+            expect @client.methods-specs.delete_product.env.spore.scheme .toBe "http"
 
         describe 'No token',(x) ->
 

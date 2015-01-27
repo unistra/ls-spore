@@ -7,7 +7,7 @@ class SporeMethodsFactory
             pop-payload = ->
                 payload = if params.payload? then params.payload else {}
                 delete params.payload
-                if method-specs.required_payload and ((not) params.payload? or params.payload="")
+                if method-specs.required_payload? and method-specs.required_payload==true and Object.keys(payload).length==0
                     window.console.error "Spore error: payload is required"
                 payload
 
@@ -115,10 +115,10 @@ class Spore
             @['methods'][key] = my-factory.create-method(key, @methods-specs[key], @middlewares)
 
     _generate-methods-specs: (method-key, method-value)->
+        @methods-specs[method-key] = {}
         for k, v of method-value
             if k!="env"
-                @methods-specs[method-key] = {}
-                @methods-specs[k] = v
+                @methods-specs[method-key][k] = v
 
     _generate-methods-env: (method-key, method-value)->
         url_parser = document.createElement 'a'
