@@ -100,12 +100,12 @@ class Spore
         window.console.log "TODO enable if"
 
     log-basic-infos: ->
-        window.console.log "Name: " + @name
-        window.console.log "Base url: " + @base_url
-        window.console.log "Authority: " + @authority
-        window.console.log "Formats: " + @formats
-        window.console.log "Version: " + @version
-        window.console.log "Meta: " + JSON.stringify @meta
+        window.console.log "Name: " + @description.name
+        window.console.log "Base url: " + @description.base_url
+        window.console.log "Authority: " + @description.authority
+        window.console.log "Formats: " + @description.formats
+        window.console.log "Version: " + @description.version
+        window.console.log "Meta: " + JSON.stringify @description.meta
 
     _generate-methods: (methods) ->
         my-factory = new SporeMethodsFactory!
@@ -136,7 +136,7 @@ class Spore
         #TODO expected_status
         @methods-specs[method-key].env.spore.expected_status = method-value.expected_status
         #TODO authentication
-        @methods-specs[method-key].env.spore.authentication = if method-value.authentication? then method-value.authentication else false
+        @methods-specs[method-key].env.spore.authentication = @_get-authentication method-value.authentication
         @methods-specs[method-key].env.spore.params = {}
         @methods-specs[method-key].env.spore.payload = {}
         #TODO errors
@@ -145,6 +145,14 @@ class Spore
         #TODO formats
         @methods-specs[method-key].env.spore.formats = method-value.formats
         @methods-specs[method-key].env.spore.scheme = url_parser.protocol.split(":")[0]
+
+
+    _get-authentication: (method-authentication)->
+        if method-authentication?
+        then method-authentication
+        else if @description.authentication?
+        then @description.authentication
+        else false
 
     _get-path-info: (script_name, pathname, method_path) ->
         res = ""
@@ -177,15 +185,9 @@ class Spore
         then port=443
         port
 
-    _generate-basics: (description) ->
-        for key, value of description
-            if key != 'methods'
-                @[key] = value
-
     _call-callback: (response, callback)->
         @description = response
         @_generate-methods @description.methods
-        @_generate-basics @description
         @is-ready = true
         callback!
 

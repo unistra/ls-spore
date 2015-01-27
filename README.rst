@@ -120,13 +120,14 @@ Implemented
 * url for description file
 * enable middleware
 * middleware auth by token
+* authentication (only for Authorization header)
 
 
 Not Implemented
 ---------------
 
 * expected_status (currently, always 200)
-* authentication (currently, depends of headers)
+* authentication (currently, only for Authorization header)
 * unattended_params
 * formats (currently, only JSON)
 * methods -> expected_status

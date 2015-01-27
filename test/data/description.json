@@ -5,8 +5,8 @@
     "formats": [
         "json"
     ],
+    "authentication": true,
     "version": "1.0.0",
-
     "methods": {
 
         "add_product": {

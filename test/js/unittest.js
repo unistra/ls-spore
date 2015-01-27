@@ -23,7 +23,14 @@
       it('check client base attrs', function(){
         expect(this.client.url).toBe('/base/data/description.json');
         expect(this.client.baseUrl).toBe('http://localhost:3000/api');
-        return expect(this.client.description.name).toBe('TEST API');
+        expect(this.client.description.name).toBe('TEST API');
+        expect(this.client.description.authority).toBe('Unistra:DI');
+        expect(this.client.description.base_url).toBe('http://localhost:3000/api');
+        expect(this.client.description.formats[0]).toBe("json");
+        expect(this.client.description.authentication).toBe(true);
+        expect(this.client.description.version).toBe("1.0.0");
+        expect(this.client.description.meta.documentation).toBe("");
+        return expect(this.client.description.meta.authors).toBe("dip unistra");
       });
       it('check client methods specs add product', function(){
         expect(this.client.methodsSpecs.add_product != null).toBe(true);

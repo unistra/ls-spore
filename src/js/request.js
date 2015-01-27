@@ -50,7 +50,9 @@
       xhr.setRequestHeader("Content-Type", 'application/json');
       for (k in ref$ = this.env.spore.headers) {
         v = ref$[k];
-        xhr.setRequestHeader(k, v);
+        if (k !== "Authorization" || (k === "Authorization" && this.env.spore.authentication === true)) {
+          xhr.setRequestHeader(k, v);
+        }
       }
       if (in$('overrideMimeType', xhr)) {
         xhr.overrideMimeType('application/json');

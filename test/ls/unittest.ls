@@ -27,7 +27,15 @@ describe 'Spore',(x) ->
         it 'check client base attrs', ->
             expect @client.url .toBe \/base/data/description.json
             expect @client.base-url .toBe \http://localhost:3000/api
+
             expect @client.description.name .toBe 'TEST API'
+            expect @client.description.authority .toBe 'Unistra:DI'
+            expect @client.description.base_url .toBe 'http://localhost:3000/api'
+            expect @client.description.formats[0] .toBe "json"
+            expect @client.description.authentication .toBe true
+            expect @client.description.version .toBe "1.0.0"
+            expect @client.description.meta.documentation .toBe ""
+            expect @client.description.meta.authors .toBe "dip unistra"
 
         it 'check client methods specs add product', ->
             #basics

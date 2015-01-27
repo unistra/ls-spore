@@ -150,12 +150,12 @@
       return window.console.log("TODO enable if");
     };
     prototype.logBasicInfos = function(){
-      window.console.log("Name: " + this.name);
-      window.console.log("Base url: " + this.base_url);
-      window.console.log("Authority: " + this.authority);
-      window.console.log("Formats: " + this.formats);
-      window.console.log("Version: " + this.version);
-      return window.console.log("Meta: " + JSON.stringify(this.meta));
+      window.console.log("Name: " + this.description.name);
+      window.console.log("Base url: " + this.description.base_url);
+      window.console.log("Authority: " + this.description.authority);
+      window.console.log("Formats: " + this.description.formats);
+      window.console.log("Version: " + this.description.version);
+      return window.console.log("Meta: " + JSON.stringify(this.description.meta));
     };
     prototype._generateMethods = function(methods){
       var myFactory, key, value, results$ = [];
@@ -192,13 +192,22 @@
       this.methodsSpecs[methodKey].env.QUERY_STRING = "";
       this.methodsSpecs[methodKey].env.spore = {};
       this.methodsSpecs[methodKey].env.spore.expected_status = methodValue.expected_status;
-      this.methodsSpecs[methodKey].env.spore.authentication = methodValue.authentication != null ? methodValue.authentication : false;
+      this.methodsSpecs[methodKey].env.spore.authentication = this._getAuthentication(methodValue.authentication);
       this.methodsSpecs[methodKey].env.spore.params = {};
       this.methodsSpecs[methodKey].env.spore.payload = {};
       this.methodsSpecs[methodKey].env.spore.errors = {};
       this.methodsSpecs[methodKey].env.spore.headers = {};
       this.methodsSpecs[methodKey].env.spore.formats = methodValue.formats;
       return this.methodsSpecs[methodKey].env.spore.scheme = url_parser.protocol.split(":")[0];
+    };
+    prototype._getAuthentication = function(methodAuthentication){
+      if (methodAuthentication != null) {
+        return methodAuthentication;
+      } else if (this.description.authentication != null) {
+        return this.description.authentication;
+      } else {
+        return false;
+      }
     };
     prototype._getPathInfo = function(script_name, pathname, method_path){
       var res;
@@ -242,20 +251,9 @@
       }
       return port;
     };
-    prototype._generateBasics = function(description){
-      var key, value, results$ = [];
-      for (key in description) {
-        value = description[key];
-        if (key !== 'methods') {
-          results$.push(this[key] = value);
-        }
-      }
-      return results$;
-    };
     prototype._callCallback = function(response, callback){
       this.description = response;
       this._generateMethods(this.description.methods);
-      this._generateBasics(this.description);
       this.isReady = true;
       return callback();
     };

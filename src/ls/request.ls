@@ -36,7 +36,8 @@ class SporeRequest
         xhr.open @env.REQUEST_METHOD, url, true
         xhr.set-request-header "Content-Type", 'application/json'
         for k, v of @env.spore.headers
-            xhr.set-request-header k, v
+            if (k!="Authorization") or (k=="Authorization" and @env.spore.authentication == true)
+                xhr.set-request-header k, v
         #TODO content type for xml and others
         xhr.override-mime-type 'application/json' if 'overrideMimeType' in xhr
         xhr.onreadystatechange = !~>
