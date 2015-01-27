@@ -233,7 +233,7 @@
             }, function(error){});
           });
           return it('delete one product', function(){
-            return expect(this.routeDeleteOne).toEqual("");
+            return expect(this.routeDeleteOne).toEqual('');
           });
         });
       });

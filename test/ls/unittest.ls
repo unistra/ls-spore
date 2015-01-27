@@ -150,8 +150,7 @@ describe 'Spore',(x) ->
                 }, (response) ~>
                     @route-post = response
                     done!
-                ,
-                   (error) ~>
+                , (error) ~>
                     void
 
             it 'No token add product', ->
@@ -172,8 +171,7 @@ describe 'Spore',(x) ->
                 }, (response) ~>
                     @route-post = response
                     done!
-                ,
-                   (error) ~>
+                , (error) ~>
                     void
 
             it 'No token add product', ->
@@ -183,9 +181,9 @@ describe 'Spore',(x) ->
         # ENABLE TOKEN MIDDLEWARE HERE !
         it 'enable middleware', ->
             @client.enable SporeMiddlewareAuthApiKey, {key_name:"Authorization", key_value:"Token S3CR3T"}
-            expect(@client.middlewares[1].middleware-class.name).toBe("SporeMiddlewareAuthApiKey")
-            expect(@client.middlewares[1].params.key_name).toBe("Authorization")
-            expect(@client.middlewares[1].params.key_value).toBe("Token S3CR3T")
+            expect @client.middlewares[1].middleware-class.name .toBe "SporeMiddlewareAuthApiKey" 
+            expect @client.middlewares[1].params.key_name .toBe "Authorization"
+            expect @client.middlewares[1].params.key_value .toBe "Token S3CR3T"
 
 
         describe 'Test add product',(x) ->
@@ -200,14 +198,13 @@ describe 'Spore',(x) ->
                 }, (response) ~>
                     @route-post = response
                     done()
-                ,
-                   (error) ~>
+                , (error) ~>
                     void
 
             it 'add product', ->
-                expect(@route-post.name).toEqual("voiture")
-                expect(@route-post.sku).toEqual("206")
-                expect(@route-post.price).toEqual(10000)
+                expect @route-post.name .toEqual "voiture"
+                expect @route-post.sku .toEqual "206"
+                expect @route-post.price .toEqual 10000
 
 
             describe 'Test get products',(x) ->
@@ -218,15 +215,14 @@ describe 'Spore',(x) ->
                     }, (response) ~>
                         @route-get-list = response
                         done!
-                    ,
-                       (error) ~>
+                    , (error) ~>
                         void
 
                 it 'get products', ->
                     expect @route-get-list.length .toBeGreaterThan 0
-                    expect(@route-get-list[0].name).toEqual("voiture")
-                    expect(@route-get-list[0].sku).toEqual("206")
-                    expect(@route-get-list[0].price).toEqual(10000)
+                    expect @route-get-list[0].name .toEqual "voiture"
+                    expect @route-get-list[0].sku .toEqual "206"
+                    expect @route-get-list[0].price .toEqual 10000
 
             describe 'Test get one product',(x) ->
 
@@ -236,15 +232,13 @@ describe 'Spore',(x) ->
                     }, (response) ~>
                         @route-get-one = response
                         done()
-                    ,
-                       (error) ~>
+                    , (error) ~>
                         void
 
                 it 'get one product', ->
-                    expect(@route-get-one.name).toEqual("voiture")
-                    expect(@route-get-one.sku).toEqual("206")
-                    expect(@route-get-one.price).toEqual(10000)
-
+                    expect @route-get-one.name .toEqual "voiture"
+                    expect @route-get-one.sku .toEqual "206"
+                    expect @route-get-one.price .toEqual 10000
 
 
             describe 'Test delete product',(x) ->
@@ -255,10 +249,9 @@ describe 'Spore',(x) ->
                     }, (response) ~>
                         @route-delete-one = response
                         done()
-                    ,
-                       (error) ~>
+                    , (error) ~>
                         void
 
                 it 'delete one product', ->
-                    expect(@route-delete-one).toEqual("")
+                    expect @route-delete-one .toEqual ''
 
