@@ -53,7 +53,7 @@ class SporeMethodsFactory
                 add-payload payload
                 add-headers!
                 final-env = method-specs.env
-                request = new SporeRequest(final-env)
+                request = new SporeRequest final-env
                 request.call success, error
             else window.console.error "Spore error: wrong parameters of #{name}"
 
@@ -80,8 +80,8 @@ class Spore
                 if xhr.status in [200 0]
                 then
                     try
-                        my-json = JSON.parse(xhr.response-text)
-                        @_call-callback(my-json, success)
+                        my-json = JSON.parse xhr.response-text
+                        @_call-callback my-json, success
                     catch
                         error-msg = "Spore error: cannot parse json description file"
                         window.console.error error-msg
@@ -105,14 +105,14 @@ class Spore
         window.console.log "Authority: " + @authority
         window.console.log "Formats: " + @formats
         window.console.log "Version: " + @version
-        window.console.log "Meta: " + JSON.stringify(@meta)
+        window.console.log "Meta: " + JSON.stringify @meta
 
     _generate-methods: (methods) ->
         my-factory = new SporeMethodsFactory!
         for key, value of methods
             @_generate-methods-specs key, value
             @_generate-methods-env key, value
-            @['methods'][key] = my-factory.create-method(key, @methods-specs[key], @middlewares)
+            @['methods'][key] = my-factory.create-method key, @methods-specs[key], @middlewares
 
     _generate-methods-specs: (method-key, method-value)->
         @methods-specs[method-key] = {}
@@ -150,7 +150,7 @@ class Spore
         res = ""
         # from base url
         if script_name? and script_name!=""
-        then res = pathname.replace(script_name,"")
+        then res = pathname.replace script_name,""
         else res = pathname
         if res == "/" then res = ""
         # from method

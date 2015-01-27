@@ -5,7 +5,7 @@ class SporeRequest
     call: (success, error)->
         url-template = @_generate-url-template!
         url = @_generate-final-url url-template
-        query = @_do-request(url, success, error)
+        query = @_do-request url, success, error
 
     _generate-url-template: ->
         url-template = @env.spore.scheme + "://" + @env.SERVER_NAME
@@ -20,7 +20,7 @@ class SporeRequest
         for k,v of @env.spore.params
             re = new RegExp ":("+ k + ")"
             if url-template.search(re)>=0
-            then url-template=url-template.replace(re, v)
+            then url-template=url-template.replace re, v
             else 
                 if query-string != "" 
                 then query-string+="&"
@@ -44,8 +44,8 @@ class SporeRequest
                 if xhr.status in [200 201 202 203 204 205 206 0]
                 then
                     try
-                        my-json = if xhr.response-text!="" then JSON.parse(xhr.response-text) else ""
-                        success(my-json)
+                        my-json = if xhr.response-text!="" then JSON.parse xhr.response-text else ""
+                        success my-json
                     catch
                         error-msg = "Spore error: cannot parse json method response"
                         window.console.error error-msg
