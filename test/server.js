@@ -49,6 +49,12 @@ Products.remove({}, function(err,removed) {
 Products.methods(['get', 'put', 'post', 'delete', 'patch']);
 Products.register(app,'/api/products');
 
+app.use(function(req, res, next){
+    res.status(404);
+    res.send({ error: 'Not found' });
+    return;
+});
+
 // Launch server
 app.listen(3000);
 console.log('Server is running at port 3000')

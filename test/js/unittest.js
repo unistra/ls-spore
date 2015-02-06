@@ -8,6 +8,8 @@
       this.routePost = void 8;
       this.routeGetOne = void 8;
       this.routeDeleteOne = void 8;
+      this.routeGetOneExpectedNotFound = void 8;
+      this.routeDeleteOneUnexpectedNotFound = void 8;
       return this.client = new Spore('/base/data/description.json', function(){
         return done();
       }, function(){}, base_url = 'http://localhost:3000/api');
@@ -47,7 +49,7 @@
         expect(this.client.methodsEnv.add_product.SCRIPT_NAME).toBe("/api");
         expect(this.client.methodsEnv.add_product.PATH_INFO).toBe("/products");
         expect(this.client.methodsEnv.add_product.QUERY_STRING).toBe("");
-        expect(this.client.methodsEnv.add_product.spore.expected_status).toBe(void 8);
+        expect(this.client.methodsEnv.add_product.spore.expected_status.length).toBe(0);
         expect(this.client.methodsEnv.add_product.spore.authentication).toBe(true);
         expect(Object.keys(this.client.methodsEnv.add_product.spore.params).length).toBe(0);
         expect(Object.keys(this.client.methodsEnv.add_product.spore.payload).length).toBe(0);
@@ -71,7 +73,7 @@
         expect(this.client.methodsEnv.get_products.SCRIPT_NAME).toBe("/api");
         expect(this.client.methodsEnv.get_products.PATH_INFO).toBe("/products");
         expect(this.client.methodsEnv.get_products.QUERY_STRING).toBe("");
-        expect(this.client.methodsEnv.get_products.spore.expected_status).toBe(void 8);
+        expect(this.client.methodsEnv.get_products.spore.expected_status.length).toBe(0);
         expect(this.client.methodsEnv.get_products.spore.authentication).toBe(true);
         expect(Object.keys(this.client.methodsEnv.get_products.spore.params).length).toBe(0);
         expect(Object.keys(this.client.methodsEnv.get_products.spore.payload).length).toBe(0);
@@ -95,7 +97,7 @@
         expect(this.client.methodsEnv.get_product.SCRIPT_NAME).toBe("/api");
         expect(this.client.methodsEnv.get_product.PATH_INFO).toBe("/products/:id");
         expect(this.client.methodsEnv.get_product.QUERY_STRING).toBe("");
-        expect(this.client.methodsEnv.get_product.spore.expected_status).toBe(void 8);
+        expect(this.client.methodsEnv.get_product.spore.expected_status[0]).toBe(404);
         expect(this.client.methodsEnv.get_product.spore.authentication).toBe(true);
         expect(Object.keys(this.client.methodsEnv.get_product.spore.params).length).toBe(0);
         expect(Object.keys(this.client.methodsEnv.get_product.spore.payload).length).toBe(0);
@@ -119,7 +121,7 @@
         expect(this.client.methodsEnv.delete_product.SCRIPT_NAME).toBe("/api");
         expect(this.client.methodsEnv.delete_product.PATH_INFO).toBe("/products/:id");
         expect(this.client.methodsEnv.delete_product.QUERY_STRING).toBe("");
-        expect(this.client.methodsEnv.delete_product.spore.expected_status).toBe(void 8);
+        expect(this.client.methodsEnv.delete_product.spore.expected_status.length).toBe(0);
         expect(this.client.methodsEnv.delete_product.spore.authentication).toBe(true);
         expect(Object.keys(this.client.methodsEnv.delete_product.spore.params).length).toBe(0);
         expect(Object.keys(this.client.methodsEnv.delete_product.spore.payload).length).toBe(0);
@@ -229,7 +231,7 @@
             return expect(this.routeGetOne.price).toEqual(10000);
           });
         });
-        return describe('Test delete product', function(x){
+        describe('Test delete product', function(x){
           beforeAll(function(done){
             var this$ = this;
             return this.client.methods.delete_product({
@@ -241,6 +243,34 @@
           });
           return it('delete one product', function(){
             return expect(this.routeDeleteOne).toEqual('');
+          });
+        });
+        describe('Test 404 one product expected', function(x){
+          beforeAll(function(done){
+            var this$ = this;
+            return this.client.methods.get_product({
+              id: "999"
+            }, function(response){
+              this$.routeGetOneExpectedNotFound = response;
+              return done();
+            }, function(error){});
+          });
+          return it('get one product', function(){
+            return expect(this.routeGetOneExpectedNotFound.error).toEqual("Not found");
+          });
+        });
+        return describe('Test delete 404 one product unexpected', function(x){
+          beforeAll(function(done){
+            var this$ = this;
+            return this.client.methods.delete_product({
+              id: "999"
+            }, function(response){}, function(error){
+              this$.routeDeleteOneUnexpectedNotFound = error;
+              return done();
+            });
+          });
+          return it('get one product', function(){
+            return expect(this.routeDeleteOneUnexpectedNotFound.error).toEqual("Spore error: Call http://localhost:3000/api/products/999");
           });
         });
       });

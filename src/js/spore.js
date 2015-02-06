@@ -115,7 +115,7 @@
       xhr.onreadystatechange = function(){
         var ref$, myJson, e, errorMsg;
         if (xhr.readyState === 4) {
-          if ((ref$ = xhr.status) === 200 || ref$ === 0) {
+          if (200 <= (ref$ = xhr.status) && ref$ <= 299) {
             try {
               myJson = JSON.parse(xhr.responseText);
               this$._callCallback(myJson, success);
@@ -178,7 +178,9 @@
       this.methodsEnv[methodKey].PATH_INFO = this._getPathInfo(this.methodsEnv[methodKey].SCRIPT_NAME, url_parser.pathname, methodValue.path);
       this.methodsEnv[methodKey].QUERY_STRING = "";
       this.methodsEnv[methodKey].spore = {};
-      this.methodsEnv[methodKey].spore.expected_status = methodValue.expected_status;
+      this.methodsEnv[methodKey].spore.expected_status = methodValue.expected_status != null
+        ? methodValue.expected_status
+        : [];
       this.methodsEnv[methodKey].spore.authentication = this._getAuthentication(methodValue.authentication);
       this.methodsEnv[methodKey].spore.params = {};
       this.methodsEnv[methodKey].spore.payload = {};

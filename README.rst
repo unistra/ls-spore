@@ -116,6 +116,7 @@ Implemented
 * methods -> base_url
 * methods -> payload
 * methods -> required_payload
+* methods -> expected_status
 * create spore client
 * url for description file
 * enable middleware
@@ -126,17 +127,15 @@ Implemented
 Not Implemented
 ---------------
 
-* expected_status (currently, always 200)
 * authentication (currently, only for Authorization header)
 * unattended_params
 * formats (currently, only JSON)
-* methods -> expected_status
 * methods -> form-data
 * methods -> optional_payload
 * methods -> unattended_params
 * methods -> description
 * methods -> deprecated
-* methods -> authentication
+* methods -> authentication (currently, only for Authorization header)
 * methods -> formats (currently, only JSON)
 * enable if middleware
 * disable middleware

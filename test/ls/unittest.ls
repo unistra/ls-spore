@@ -6,6 +6,8 @@ describe 'Spore',(x) ->
         @route-post = void
         @route-get-one = void
         @route-delete-one = void
+        @route-get-one-expected-not-found = void
+        @route-delete-one-unexpected-not-found = void
         @client = new Spore  \/base/data/description.json, (->
             done!
         ), 
@@ -55,7 +57,7 @@ describe 'Spore',(x) ->
             expect @client.methods-env.add_product.PATH_INFO .toBe "/products"
             expect @client.methods-env.add_product.QUERY_STRING .toBe ""
             #env spore
-            expect @client.methods-env.add_product.spore.expected_status .toBe void
+            expect @client.methods-env.add_product.spore.expected_status.length .toBe 0
             expect @client.methods-env.add_product.spore.authentication .toBe true
             expect Object.keys(@client.methods-env.add_product.spore.params).length .toBe 0
             expect Object.keys(@client.methods-env.add_product.spore.payload).length .toBe 0
@@ -82,7 +84,7 @@ describe 'Spore',(x) ->
             expect @client.methods-env.get_products.PATH_INFO .toBe "/products"
             expect @client.methods-env.get_products.QUERY_STRING .toBe ""
             #env spore
-            expect @client.methods-env.get_products.spore.expected_status .toBe void
+            expect @client.methods-env.get_products.spore.expected_status.length .toBe 0
             expect @client.methods-env.get_products.spore.authentication .toBe true
             expect Object.keys(@client.methods-env.get_products.spore.params).length .toBe 0
             expect Object.keys(@client.methods-env.get_products.spore.payload).length .toBe 0
@@ -109,7 +111,7 @@ describe 'Spore',(x) ->
             expect @client.methods-env.get_product.PATH_INFO .toBe "/products/:id"
             expect @client.methods-env.get_product.QUERY_STRING .toBe ""
             #env spore
-            expect @client.methods-env.get_product.spore.expected_status .toBe void
+            expect @client.methods-env.get_product.spore.expected_status[0] .toBe 404
             expect @client.methods-env.get_product.spore.authentication .toBe true
             expect Object.keys(@client.methods-env.get_product.spore.params).length .toBe 0
             expect Object.keys(@client.methods-env.get_product.spore.payload).length .toBe 0
@@ -137,7 +139,7 @@ describe 'Spore',(x) ->
             expect @client.methods-env.delete_product.PATH_INFO .toBe "/products/:id"
             expect @client.methods-env.delete_product.QUERY_STRING .toBe ""
             #env spore
-            expect @client.methods-env.delete_product.spore.expected_status .toBe void
+            expect @client.methods-env.delete_product.spore.expected_status.length .toBe 0
             expect @client.methods-env.delete_product.spore.authentication .toBe true
             expect Object.keys(@client.methods-env.delete_product.spore.params).length .toBe 0
             expect Object.keys(@client.methods-env.delete_product.spore.payload).length .toBe 0
@@ -262,4 +264,35 @@ describe 'Spore',(x) ->
 
                 it 'delete one product', ->
                     expect @route-delete-one .toEqual ''
+
+
+
+            describe 'Test 404 one product expected',(x) ->
+
+                before-all (done) ->
+                    @client.methods.get_product {
+                        id: "999",
+                    }, (response) ~>
+                        @route-get-one-expected-not-found = response
+                        done()
+                    , (error) ~>
+                        void
+
+                it 'get one product', ->
+                    expect @route-get-one-expected-not-found.error .toEqual "Not found"
+
+
+            describe 'Test delete 404 one product unexpected',(x) ->
+
+                before-all (done) ->
+                    @client.methods.delete_product {
+                        id: "999",
+                    }, (response) ~>
+                       void
+                    , (error) ~>
+                        @route-delete-one-unexpected-not-found = error
+                        done()
+
+                it 'get one product', ->
+                    expect @route-delete-one-unexpected-not-found.error .toEqual "Spore error: Call http://localhost:3000/api/products/999"
 

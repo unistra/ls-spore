@@ -42,7 +42,7 @@ class SporeRequest
         xhr.override-mime-type 'application/json' if 'overrideMimeType' in xhr
         xhr.onreadystatechange = !~>
             if xhr.ready-state is 4
-                if xhr.status in [200 201 202 203 204 205 206 0]
+                if 200 <= xhr.status <= 299 or xhr.status in @env.spore.expected_status
                 then
                     try
                         my-json = if xhr.response-text!="" then JSON.parse xhr.response-text else ""

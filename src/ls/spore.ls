@@ -76,7 +76,7 @@ class Spore
         xhr.override-mime-type 'application/json' if 'overrideMimeType' in xhr
         xhr.onreadystatechange = !~>
             if xhr.ready-state is 4
-                if xhr.status in [200 0]
+                if 200 <= xhr.status <= 299
                 then
                     try
                         my-json = JSON.parse xhr.response-text
@@ -126,8 +126,7 @@ class Spore
 
         @methods-env[method-key].spore = {}
         #TODO expected_status
-        @methods-env[method-key].spore.expected_status = method-value.expected_status
-        #TODO authentication
+        @methods-env[method-key].spore.expected_status = if method-value.expected_status? then method-value.expected_status else []
         @methods-env[method-key].spore.authentication = @_get-authentication method-value.authentication
         @methods-env[method-key].spore.params = {}
         @methods-env[method-key].spore.payload = {}

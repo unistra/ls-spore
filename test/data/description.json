@@ -37,6 +37,7 @@
 
         "get_product": {
             "path": "/products/:id",
+            "expected_status": [404],
             "required_params": [
                 "id"
             ],

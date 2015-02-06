@@ -60,7 +60,7 @@
       xhr.onreadystatechange = function(){
         var ref$, myJson, e, errorMsg;
         if (xhr.readyState === 4) {
-          if ((ref$ = xhr.status) === 200 || ref$ === 201 || ref$ === 202 || ref$ === 203 || ref$ === 204 || ref$ === 205 || ref$ === 206 || ref$ === 0) {
+          if ((200 <= (ref$ = xhr.status) && ref$ <= 299) || in$(xhr.status, this$.env.spore.expected_status)) {
             try {
               myJson = xhr.responseText !== "" ? JSON.parse(xhr.responseText) : "";
               success(myJson);
