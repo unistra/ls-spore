@@ -148,4 +148,10 @@ TODO
 * be more livescript idiomatic
 
 
+Spore UI
+========
+* See the `ls-spore-ui`_ repository
+
+.. _ls-spore-ui: https://github.com/unistra/ls-spore-ui
+
 
