@@ -255,7 +255,7 @@
               return done();
             }, function(error){});
           });
-          return it('get one product', function(){
+          return it('get one product 404', function(){
             return expect(this.routeGetOneExpectedNotFound.error).toEqual("Not found");
           });
         });
@@ -269,7 +269,7 @@
               return done();
             });
           });
-          return it('get one product', function(){
+          return it('delete one product 404', function(){
             return expect(this.routeDeleteOneUnexpectedNotFound.error).toEqual("Spore error: Call http://localhost:3000/api/products/999");
           });
         });

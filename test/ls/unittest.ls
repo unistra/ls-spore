@@ -278,7 +278,7 @@ describe 'Spore',(x) ->
                     , (error) ~>
                         void
 
-                it 'get one product', ->
+                it 'get one product 404', ->
                     expect @route-get-one-expected-not-found.error .toEqual "Not found"
 
 
@@ -293,6 +293,6 @@ describe 'Spore',(x) ->
                         @route-delete-one-unexpected-not-found = error
                         done()
 
-                it 'get one product', ->
+                it 'delete one product 404', ->
                     expect @route-delete-one-unexpected-not-found.error .toEqual "Spore error: Call http://localhost:3000/api/products/999"
 
