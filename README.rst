@@ -122,6 +122,7 @@ Implemented
 * enable middleware
 * middleware auth by token
 * authentication (only for Authorization header)
+* enable if middleware
 
 
 Not Implemented
@@ -137,7 +138,6 @@ Not Implemented
 * methods -> deprecated
 * methods -> authentication (currently, only for Authorization header)
 * methods -> formats (currently, only JSON)
-* enable if middleware
 * disable middleware
 
 

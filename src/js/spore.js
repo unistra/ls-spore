@@ -53,8 +53,10 @@
           env.spore.headers = {};
           for (i$ = 0, len$ = (ref$ = middlewares).length; i$ < len$; ++i$) {
             m = ref$[i$];
-            middlewareInstance = new m['middlewareClass'](m['params']);
-            results$.push(middlewareInstance.call(env));
+            if (m.predicate(env)) {
+              middlewareInstance = new m['middlewareClass'](m['params']);
+              results$.push(middlewareInstance.call(env));
+            }
           }
           return results$;
         };
@@ -76,10 +78,10 @@
         };
         payload = popPayload();
         if (checkRequireParams && checkWrongParams) {
-          applyMiddlewares();
           addParams();
           addPayload(payload);
           addHeaders();
+          applyMiddlewares();
           request = new SporeRequest(env);
           return request.call(success, error);
         } else {
@@ -140,13 +142,16 @@
       return xhr;
     };
     prototype.enable = function(middlewareClass, params){
+      return this.enableIf(function(request){
+        return true;
+      }, middlewareClass, params);
+    };
+    prototype.enableIf = function(predicate, middlewareClass, params){
       return this.middlewares.push({
+        predicate: predicate,
         middlewareClass: middlewareClass,
         params: params
       });
-    };
-    prototype.enableIf = function(middlewareClass, params){
-      return window.console.log("TODO enable if");
     };
     prototype.logBasicInfos = function(){
       window.console.log("Name: " + this.description.name);

@@ -29,9 +29,9 @@ class SporeMethodsFactory
             apply-middlewares = ->
                 env.spore.headers = {}
                 for m in middlewares
-                    middleware-instance = new m['middlewareClass'] m['params']
-                    middleware-instance.call env
-
+                    if m.predicate env
+                        middleware-instance = new m['middlewareClass'] m['params']
+                        middleware-instance.call env
 
             add-params = ->
                 env.spore.params = params
@@ -48,10 +48,10 @@ class SporeMethodsFactory
             payload = pop-payload!
             if check-require-params and check-wrong-params
             then
-                apply-middlewares!
                 add-params!
                 add-payload payload
                 add-headers!
+                apply-middlewares!
                 request = new SporeRequest env
                 request.call success, error
             else window.console.error "Spore error: wrong parameters of #{name}"
@@ -93,10 +93,12 @@ class Spore
         xhr
 
     enable: (middleware-class, params)->
-        @middlewares.push {middleware-class: middleware-class, params:params}
+        @enable-if (request) ->
+            return true
+        , middleware-class, params
 
-    enable-if: (middleware-class, params)->
-        window.console.log "TODO enable if"
+    enable-if: (predicate, middleware-class, params)->
+        @middlewares.push {predicate: predicate, middleware-class: middleware-class, params:params}
 
     log-basic-infos: ->
         window.console.log "Name: " + @description.name
