@@ -270,7 +270,7 @@
             });
           });
           return it('delete one product 404', function(){
-            return expect(this.routeDeleteOneUnexpectedNotFound.error).toEqual("Spore error: Call http://localhost:3000/api/products/999");
+            return expect(this.routeDeleteOneUnexpectedNotFound.error).toEqual('Spore error 404 Not Found: {"error":"Not found"}');
           });
         });
       });
