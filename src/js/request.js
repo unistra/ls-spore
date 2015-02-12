@@ -73,7 +73,7 @@
               });
             }
           } else {
-            errorMsg = "Spore error: Call " + url;
+            errorMsg = "Spore error " + xhr.status + " " + xhr.statusText + ": " + xhr.responseText;
             window.console.error(errorMsg);
             error({
               error: errorMsg

@@ -52,7 +52,7 @@ class SporeRequest
                         window.console.error error-msg
                         error {error:error-msg}
                 else
-                    error-msg = "Spore error: Call #{url}"
+                    error-msg = "Spore error #{xhr.status} #{xhr.statusText}: #{xhr.response-text}"
                     window.console.error error-msg
                     error {error:error-msg}
         if Object.keys(@env.spore.payload).length > 0
