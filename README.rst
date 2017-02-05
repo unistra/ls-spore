@@ -58,6 +58,15 @@ Include and use "build/spore-client.min.js" :
     </html>
 
 
+Imports with es2015
+-------------------
+
+.. code-block:: javascript
+
+    import { SporeMiddlewareAuthApiKey, Spore } from "spore-client.min.js"
+
+
+
 Developement
 ============
 
