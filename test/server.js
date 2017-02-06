@@ -1,11 +1,17 @@
-// Requirement
 var express = require('express'),
+    bodyParser = require('body-parser'),
+    methodOverride = require('method-override'),
+    morgan = require('morgan'),
     restful = require('node-restful'),
     mongoose = restful.mongoose;
-    bodyParser  = require('body-parser');
-
-// Start app 
 var app = express();
+
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({'extended':'true'}));
+app.use(bodyParser.json());
+app.use(bodyParser.json({type:'application/vnd.api+json'}));
+app.use(methodOverride());
+
 // Server static description file
 app.use('/static', express.static(__dirname + '/data'));
 // Add CORS headers
@@ -15,11 +21,7 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Methods", "PUT, DELETE, GET, POST, PATCH");
   next();
 });
-// JSON parsing
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+
 // Simple static token authentication
 app.use(function(req, res, next) {
   if (!req.headers.authorization) {
@@ -33,27 +35,22 @@ app.use(function(req, res, next) {
     }
   }
 });
-// Clean and connect to Database 
+// Clean and connect to Database
 mongoose.connect("mongodb://localhost/lssporeunittest");
-var db = mongoose.connection
-var ProductSchema = mongoose.Schema({
+
+var Products = app.products = restful.model('products', mongoose.Schema({
     name: String,
     sku: String,
     price: Number
-});
-var Products = restful.model('products', ProductSchema);
+  }))
+  .methods(['get', 'put', 'post', 'delete', 'patch']);
+
 Products.remove({}, function(err,removed) {
     console.log("Database cleaned")
 });
 
-Products.methods(['get', 'put', 'post', 'delete', 'patch']);
 Products.register(app,'/api/products');
 
-app.use(function(req, res, next){
-    res.status(404);
-    res.send({ error: 'Not found' });
-    return;
-});
 
 // Launch server
 app.listen(3000);

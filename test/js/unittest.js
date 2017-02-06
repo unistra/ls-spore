@@ -249,28 +249,28 @@
           beforeAll(function(done){
             var this$ = this;
             return this.client.methods.get_product({
-              id: "999"
+              id: "58986ddb9e7548077551d16f"
             }, function(response){
               this$.routeGetOneExpectedNotFound = response;
               return done();
             }, function(error){});
           });
           it('get one product 404', function(){
-            return expect(this.routeGetOneExpectedNotFound.error).toEqual("Not found");
+            return expect(this.routeGetOneExpectedNotFound.error).toEqual(undefined);
           });
         });
         describe('Test delete 404 one product unexpected', function(){
           beforeAll(function(done){
             var this$ = this;
             return this.client.methods.delete_product({
-              id: "999"
+              id: "58986ddb9e7548077551d16f"
             }, function(response){}, function(error){
               this$.routeDeleteOneUnexpectedNotFound = error;
               return done();
             });
           });
           it('delete one product 404', function(){
-            return expect(this.routeDeleteOneUnexpectedNotFound.error).toEqual('Spore error 404 Not Found: {"error":"Not found"}');
+            return expect(this.routeDeleteOneUnexpectedNotFound.error).toEqual('Spore error 404 Not Found: {"status":404,"message":"Object not found","name":"ObjectNotFound","errors":{"_id":{"message":"Could not find object with specified attributes"}}}');
           });
         });
       });

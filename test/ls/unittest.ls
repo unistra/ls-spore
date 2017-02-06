@@ -271,7 +271,7 @@ describe 'Spore',(...) !->
 
                 before-all (done) ->
                     @client.methods.get_product {
-                        id: "999",
+                        id: "58986ddb9e7548077551d16f",
                     }, (response) ~>
                         @route-get-one-expected-not-found = response
                         done()
@@ -279,14 +279,14 @@ describe 'Spore',(...) !->
                         void
 
                 it 'get one product 404', ->
-                    expect @route-get-one-expected-not-found.error .toEqual "Not found"
+                    expect @route-get-one-expected-not-found.error .toEqual undefined
 
 
             describe 'Test delete 404 one product unexpected',(...) !->
 
                 before-all (done) ->
                     @client.methods.delete_product {
-                        id: "999",
+                        id: "58986ddb9e7548077551d16f",
                     }, (response) ~>
                        void
                     , (error) ~>
@@ -294,4 +294,4 @@ describe 'Spore',(...) !->
                         done()
 
                 it 'delete one product 404', ->
-                    expect @route-delete-one-unexpected-not-found.error .toEqual 'Spore error 404 Not Found: {"error":"Not found"}'
+                    expect @route-delete-one-unexpected-not-found.error .toEqual 'Spore error 404 Not Found: {"status":404,"message":"Object not found","name":"ObjectNotFound","errors":{"_id":{"message":"Could not find object with specified attributes"}}}'
