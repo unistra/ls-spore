@@ -1,4 +1,4 @@
-describe 'Spore',(x) ->
+describe 'Spore',(...) !->
 
     before-all (done) ->
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
@@ -10,14 +10,14 @@ describe 'Spore',(x) ->
         @route-delete-one-unexpected-not-found = void
         @client = new Spore  \/base/data/description.json, (->
             done!
-        ), 
+        ),
         (->
             void
         ),
         base_url=\http://localhost:3000/api
 
 
-    describe 'Test client',(x) ->
+    describe 'Test client',(...) !->
 
         it 'initialize Spore client', ->
             expect @client.isReady .toBe true
@@ -148,7 +148,7 @@ describe 'Spore',(x) ->
             expect @client.methods-env.delete_product.spore.formats .toBe void
             expect @client.methods-env.delete_product.spore.scheme .toBe "http"
 
-        describe 'No token',(x) ->
+        describe 'No token',(...) !->
 
             before-all (done) ->
                 @client.methods.add_product {
@@ -167,7 +167,7 @@ describe 'Spore',(x) ->
                 expect @route-post.error .toEqual "No credentials sent!"
 
 
-        describe 'Wrong token',(x) ->
+        describe 'Wrong token',(...) !->
 
             before-all (done) ->
                 @client.enable SporeMiddlewareAuthApiKey, {key_name:"Authorization", key_value:"Token WRONG"}
@@ -191,12 +191,12 @@ describe 'Spore',(x) ->
         # ENABLE TOKEN MIDDLEWARE HERE !
         it 'enable middleware', ->
             @client.enable SporeMiddlewareAuthApiKey, {key_name:"Authorization", key_value:"Token S3CR3T"}
-            expect @client.middlewares[1].middleware-class.name .toBe "SporeMiddlewareAuthApiKey" 
+            expect @client.middlewares[1].middleware-class.name .toBe "SporeMiddlewareAuthApiKey"
             expect @client.middlewares[1].params.key_name .toBe "Authorization"
             expect @client.middlewares[1].params.key_value .toBe "Token S3CR3T"
 
 
-        describe 'Test add product',(x) ->
+        describe 'Test add product',(...) !->
 
             before-all (done) ->
                 @client.methods.add_product {
@@ -217,7 +217,7 @@ describe 'Spore',(x) ->
                 expect @route-post.price .toEqual 10000
 
 
-            describe 'Test get products',(x) ->
+            describe 'Test get products',(...) !->
 
                 before-all (done) ->
                     @client.methods.get_products {
@@ -234,7 +234,7 @@ describe 'Spore',(x) ->
                     expect @route-get-list[0].sku .toEqual "206"
                     expect @route-get-list[0].price .toEqual 10000
 
-            describe 'Test get one product',(x) ->
+            describe 'Test get one product',(...) !->
 
                 before-all (done) ->
                     @client.methods.get_product {
@@ -251,7 +251,7 @@ describe 'Spore',(x) ->
                     expect @route-get-one.price .toEqual 10000
 
 
-            describe 'Test delete product',(x) ->
+            describe 'Test delete product',(...) !->
 
                 before-all (done) ->
                     @client.methods.delete_product {
@@ -267,7 +267,7 @@ describe 'Spore',(x) ->
 
 
 
-            describe 'Test 404 one product expected',(x) ->
+            describe 'Test 404 one product expected',(...) !->
 
                 before-all (done) ->
                     @client.methods.get_product {
@@ -282,7 +282,7 @@ describe 'Spore',(x) ->
                     expect @route-get-one-expected-not-found.error .toEqual "Not found"
 
 
-            describe 'Test delete 404 one product unexpected',(x) ->
+            describe 'Test delete 404 one product unexpected',(...) !->
 
                 before-all (done) ->
                     @client.methods.delete_product {
@@ -295,4 +295,3 @@ describe 'Spore',(x) ->
 
                 it 'delete one product 404', ->
                     expect @route-delete-one-unexpected-not-found.error .toEqual 'Spore error 404 Not Found: {"error":"Not found"}'
-

@@ -41,7 +41,7 @@ Include and use "build/spore-client.min.js" :
               }, function(response){
                 console.log("Recuperation de toto ... :");
                 return console.log(response);
-              }, 
+              },
               function(){
                 console.log("Error with the spore method");
               });
@@ -77,8 +77,8 @@ use the following lines to compile livescript to javascript :
 .. code-block:: bash
 
     sudo npm install -g LiveScript
-    lsc -wc src/ls/*.ls -o src/js/
-    lsc -wc test/ls/*.ls -o test/js/
+    lsc -wc -o src/js/ src/ls/*.ls 
+    lsc -wc -o test/js/ test/ls/*.ls
 
 use the following line to create a minified JS
 
@@ -162,5 +162,3 @@ Spore UI
 * See the `ls-spore-ui`_ repository
 
 .. _ls-spore-ui: https://github.com/unistra/ls-spore-ui
-
-
